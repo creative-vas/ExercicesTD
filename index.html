@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Feuilles d'Exercices Interactives</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #eef1f5; /* Light background for the page */
+            color: #333;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Contains the floated tabs */
+        }
+
+        /* Tab styling */
+        .tab-nav {
+            display: flex; /* Use flexbox for horizontal tabs */
+            flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
+            background-color: #007bff; /* Primary color for tab bar */
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+        }
+
+        .tab-nav-button {
+            padding: 12px 18px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            font-size: 1em;
+            transition: background-color 0.3s, color 0.3s;
+            flex-grow: 1; /* Allow tabs to take up available space */
+            text-align: center;
+            border-bottom: 3px solid transparent; /* For active state indicator */
+        }
+
+        .tab-nav-button:hover {
+            background-color: #0056b3;
+        }
+
+        .tab-nav-button.active {
+            background-color: #ffffff;
+            color: #007bff;
+            border-bottom: 3px solid #0056b3;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none; /* Hide all tab content by default */
+            padding: 25px;
+            border-top: 1px solid #ddd;
+        }
+
+        .tab-content.active {
+            display: block; /* Show active tab content */
+        }
+
+        h1.page-title {
+            text-align: center;
+            color: #333;
+            padding: 20px;
+            margin:0;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .exercise {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background-color: #fdfdfd;
+        }
+
+        .exercise h2 { /* Titles for each exercise sheet */
+            color: #007bff; 
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+        }
+        
+        .exercise h3 { /* Sub-titles within an exercise sheet if needed */
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .question-block p.context { /* Context paragraph for an exercise */
+             margin-bottom: 15px;
+             color: #555;
+             background-color: #e9ecef; /* Light grey background for context */
+             padding: 10px;
+             border-radius: 4px;
+             border-left: 3px solid #007bff;
+        }
+
+        .question {
+            margin-bottom: 18px;
+        }
+
+        .question label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .question input[type="text"],
+        .question input[type="number"],
+        .question textarea,
+        .question select {
+            width: calc(100% - 24px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        .question input[type="text"]:focus,
+        .question input[type="number"]:focus,
+        .question textarea:focus,
+        .question select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+
+        .question textarea {
+            min-height: 70px;
+            resize: vertical;
+        }
+        
+        .question .sub-question { /* For Vrai/Faux with justification */
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+         .question .sub-question label {
+            font-weight: normal;
+         }
+
+        .collect-button {
+            display: block;
+            width: auto; /* Fit content or use max-width */
+            min-width: 200px;
+            margin: 30px auto 20px auto; /* Center button */
+            padding: 12px 25px;
+            background-color: #28a745; /* Success green */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .collect-button:hover {
+            background-color: #218838;
+        }
+
+        #resultsContainer {
+            margin: 20px; /* Margin around results container */
+            padding: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+        }
+
+        #resultsContainer h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        #answersText {
+            width: 100%;
+            min-height: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            background-color: #fff;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tab-nav {
+                flex-direction: column; /* Stack tabs vertically */
+            }
+            .tab-nav-button {
+                border-bottom: 1px solid #0056b3; /* Separator for vertical tabs */
+            }
+            .tab-nav-button.active {
+                 border-bottom: 3px solid #0056b3;
+            }
+            .main-container {
+                margin: 10px;
+            }
+            .exercise {
+                padding: 15px;
+            }
+        }
+        @media (max-width: 480px) {
+            .tab-nav-button {
+                padding: 10px 15px;
+                font-size: 0.9em;
+            }
+             h1.page-title {
+                font-size: 1.5em;
+                padding: 15px;
+            }
+            .exercise h2 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1 class="page-title">Mes Exercices Interactifs</h1>
+
+        <div class="tab-nav">
+            <button class="tab-nav-button active" onclick="openTab(event, 'tab1')">Feuille 1: Zoo</button>
+            <button class="tab-nav-button" onclick="openTab(event, 'tab2')">Feuille 2: Ferme</button>
+            <button class="tab-nav-button" onclick="openTab(event, 'tab3')">Feuille 3: Anniversaire</button>
+            <button class="tab-nav-button" onclick="openTab(event, 'tab4')">Feuille 4: Famille Dubois</button>
+            <button class="tab-nav-button" onclick="openTab(event, 'tab5')">Feuille 5: Fête École</button>
+            <button class="tab-nav-button" onclick="openTab(event, 'tab6')">Feuille 6: Jour Mer</button>
+            <button class="tab-nav-button" onclick="openTab(event, 'tab7')">Feuille 7: Sommets</button>
+            <button class="tab-nav-button" onclick="openTab(event, 'tab8')">Feuille 8: Jus Fruits</button>
+            <button class="tab-nav-button" onclick="openTab(event, 'tab9')">Feuille 9: Fleuves</button>
+            <button class="tab-nav-button" onclick="openTab(event, 'tab10')">Feuille 10: Dubois (Suite)</button>
+        </div>
+
+        <div id="tab1" class="tab-content active">
+            <div class="exercise">
+                <h2>Feuille 1: Une journée au zoo</h2>
+                <div class="question-block">
+                    <h3>Exercice 1 : Le spectacle des otaries</h3>
+                    <p class="context">Le grand spectacle des otaries au zoo "Animalia" commence à 14h30 et dure 45 minutes. Le repas des manchots est prévu 1 heure après la fin du spectacle des otaries.</p>
+                    <div class="question">
+                        <label for="F1-1.1">1.1. À quelle heure se termine le spectacle des otaries ?</label>
+                        <input type="text" id="F1-1.1" data-question-id="F1-1.1">
+                    </div>
+                    <div class="question">
+                        <label for="F1-1.2">1.2. À quelle heure commence le repas des manchots ?</label>
+                        <input type="text" id="F1-1.2" data-question-id="F1-1.2">
+                    </div>
+                </div>
+                <div class="question-block">
+                    <h3>Exercice 2 : La serre aux papillons</h3>
+                    <p class="context">Pour visiter la serre aux papillons, un groupe de 3 classes arrive. Il y a 22 élèves dans la classe A, 24 élèves dans la classe B et 20 élèves dans la classe C. La serre peut accueillir un maximum de 35 personnes à la fois. Le premier groupe entre, puis 10 minutes après, le deuxième groupe peut entrer, et encore 10 minutes après pour le troisième groupe si nécessaire.</p>
+                    <div class="question">
+                        <label for="F1-2.1">2.1. Combien d'élèves y a-t-il au total ?</label>
+                        <input type="text" id="F1-2.1" data-question-id="F1-2.1">
+                    </div>
+                    <div class="question">
+                        <label for="F1-2.2">2.2. Combien de groupes faudra-t-il former pour que tous les élèves visitent la serre ?</label>
+                        <input type="text" id="F1-2.2" data-question-id="F1-2.2">
+                    </div>
+                    <div class="question">
+                        <label for="F1-2.3">2.3. Si le premier groupe entre à 10h00, à quelle heure le dernier élève (du dernier groupe nécessaire) sera-t-il entré ?</label>
+                        <input type="text" id="F1-2.3" data-question-id="F1-2.3">
+                    </div>
+                </div>
+                <div class="question-block">
+                    <h3>Exercice 3 : Le petit train du zoo</h3>
+                    <p class="context">Le petit train du zoo propose un circuit découverte. Il y a 3 wagons. Dans le premier wagon, il y a 12 places. Dans le deuxième, il y a 15 places et dans le troisième, 8 places. Lors du premier départ, 25 personnes sont montées.</p>
+                    <div class="question">
+                        <label for="F1-3.1">3.1. Combien de places y a-t-il au total dans le petit train ?</label>
+                        <input type="text" id="F1-3.1" data-question-id="F1-3.1">
+                    </div>
+                    <div class="question">
+                        <label for="F1-3.2">3.2. Combien de places sont restées libres lors du premier départ ?</label>
+                        <input type="text" id="F1-3.2" data-question-id="F1-3.2">
+                    </div>
+                    <div class="question">
+                        <label for="F1-3.3">3.3. Si chaque tour dure 20 minutes, combien de tours complets le train peut-il faire en 1 heure et 10 minutes ?</label>
+                        <input type="text" id="F1-3.3" data-question-id="F1-3.3">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab2" class="tab-content">
+            <div class="exercise">
+                <h2>Feuille 2: Les animaux de la ferme</h2>
+                 <div class="question-block">
+                    <h3>Exercice 1 : Nourriture des animaux</h3>
+                    <p class="context">Le graphique (non montré ici, mais imaginez) "Nourriture distribuée aux animaux en kg par semaine" montre : Poules: 25kg (Grains), Cochons: 50kg (Restes), Vaches: 80kg (Foin), Moutons: 40kg (Herbe).</p>
+                    <div class="question">
+                        <label for="F2-1.1">1.1. Quel est le titre de ce graphique ?</label>
+                        <input type="text" id="F2-1.1" data-question-id="F2-1.1" value="Nourriture distribuée aux animaux en kg par semaine">
+                    </div>
+                    <div class="question">
+                        <label for="F2-1.2">1.2. Quel animal reçoit le plus de nourriture par semaine ?</label>
+                        <input type="text" id="F2-1.2" data-question-id="F2-1.2">
+                    </div>
+                    <div class="question">
+                        <label for="F2-1.3">1.3. Quel animal reçoit le moins de nourriture par semaine ?</label>
+                        <input type="text" id="F2-1.3" data-question-id="F2-1.3">
+                    </div>
+                    <div class="question">
+                        <label for="F2-1.4">1.4. Combien de kg de nourriture les cochons reçoivent-ils de plus que les poules ?</label>
+                        <input type="text" id="F2-1.4" data-question-id="F2-1.4">
+                    </div>
+                    <div class="question">
+                        <label for="F2-1.5">1.5. Si Papy Jules a 2 vaches et que les 80kg de foin sont pour les deux, combien de foin mange une vache en moyenne ?</label>
+                        <input type="text" id="F2-1.5" data-question-id="F2-1.5">
+                    </div>
+                     <div class="question">
+                        <label for="F2-1.6">1.6. Quels animaux (deux différents) reçoivent ensemble (addition de leurs quantités) autant de nourriture que les vaches (80kg) ?</label>
+                        <input type="text" id="F2-1.6" data-question-id="F2-1.6">
+                    </div>
+                </div>
+                <div class="question-block">
+                    <h3>Exercice 2 : Œufs récoltés</h3>
+                    <p class="context">Données pour le graphique "Nombre d'œufs récoltés cette semaine": Lundi: 18, Mardi: 22, Mercredi: 15, Jeudi: 25, Vendredi: 20.</p>
+                    <div class="question">
+                        <label for="F2-2.1">2.1. Quel jour a-t-on récolté 22 œufs ?</label>
+                        <input type="text" id="F2-2.1" data-question-id="F2-2.1">
+                    </div>
+                    <div class="question">
+                        <label for="F2-2.2">2.2. Combien d'œufs ont été récoltés le mercredi ?</label>
+                        <input type="text" id="F2-2.2" data-question-id="F2-2.2">
+                    </div>
+                    <div class="question">
+                        <label for="F2-2.3">2.3. Quel est le nombre total d'œufs récoltés du lundi au vendredi ?</label>
+                        <input type="text" id="F2-2.3" data-question-id="F2-2.3">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="tab3" class="tab-content">
+            <div class="exercise">
+                <h2>Feuille 3: L'anniversaire de Léa</h2>
+                <div class="question-block">
+                    <h3>Exercice 1 : Entrées au parc</h3>
+                    <p class="context">Pour son anniversaire, Léa a invité ses amis au parc d'attractions. L'entrée coûte 12 € par enfant. Ils sont 7 enfants au total (Léa comprise).</p>
+                    <div class="question">
+                        <label for="F3-1.1">1.1. Quelle opération utilises-tu pour savoir combien les parents ont dépensé pour les entrées ? (+, -, x, :)</label>
+                        <input type="text" id="F3-1.1" data-question-id="F3-1.1">
+                    </div>
+                    <div class="question">
+                        <label for="F3-1.2">1.2. Écris le calcul et le résultat.</label>
+                        <input type="text" id="F3-1.2" data-question-id="F3-1.2">
+                    </div>
+                </div>
+                <div class="question-block">
+                    <h3>Exercice 2 : Partage des bonbons</h3>
+                    <p class="context">Léa a apporté un gros paquet de 120 bonbons. Elle veut les partager équitablement entre les 7 enfants.</p>
+                    <div class="question">
+                        <label for="F3-2.1">2.1. Quelle opération utilises-tu ? (+, -, x, :)</label>
+                        <input type="text" id="F3-2.1" data-question-id="F3-2.1">
+                    </div>
+                    <div class="question">
+                        <label for="F3-2.2">2.2. Combien de bonbons chaque enfant aura-t-il ?</label>
+                        <input type="text" id="F3-2.2" data-question-id="F3-2.2">
+                    </div>
+                    <div class="question">
+                        <label for="F3-2.3">2.3. Restera-t-il des bonbons ? Si oui, combien ?</label>
+                        <input type="text" id="F3-2.3" data-question-id="F3-2.3">
+                    </div>
+                </div>
+                <div class="question-block">
+                    <h3>Exercice 3 : Durée des activités</h3>
+                    <p class="context">La fête d'anniversaire a commencé à 14h00. Trampoline: 45 min. Goûter: 30 min. Auto-tamponneuses: 25 min.</p>
+                    <div class="question">
+                        <label for="F3-3.1">3.1. Combien de temps les enfants ont-ils passé au total pour ces trois activités ?</label>
+                        <input type="text" id="F3-3.1" data-question-id="F3-3.1">
+                    </div>
+                    <div class="question">
+                        <label for="F3-3.2">3.2. À quelle heure se sont-ils arrêtés après les auto-tamponneuses ?</label>
+                        <input type="text" id="F3-3.2" data-question-id="F3-3.2">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab4" class="tab-content">
+            <div class="exercise">
+                 <h2>Feuille 4: Les activités de la famille Dubois</h2>
+                 <p class="context">Tableau des activités : Marc (Papa) : Lu:Courses, Ma:Bricolage, Me:Jardinage(14h-16h), Je:Lecture. Sophie (Maman) : Lu:Yoga(17h-18h), Ma:Chercher Léo, Me:Piscine enfants(15h-17h), Je:Cuisine. Léo (10a) : Lu:Devoirs, Ma:Judo(17h30-18h30), Me:Piscine/Devoirs, Je:Club lecture(16h30-17h30). Mia (8a) : Lu:Devoirs, Ma:Danse(17h-18h), Me:Piscine/Dessin, Je:Aide Papa jardin.</p>
+                <div class="question"><label for="F4-a">a) Quel jour Léo va-t-il au judo ?</label><input type="text" id="F4-a" data-question-id="F4-a"></div>
+                <div class="question"><label for="F4-b">b) Combien d'activités différentes Maman fait-elle le mercredi après-midi (selon le tableau) ?</label><input type="text" id="F4-b" data-question-id="F4-b"></div>
+                <div class="question"><label for="F4-c">c) Qui fait du yoga et quand (jour et heure) ?</label><input type="text" id="F4-c" data-question-id="F4-c"></div>
+                <div class="question"><label for="F4-d">d) Quel est le jour où Mia aide Papa au jardin ?</label><input type="text" id="F4-d" data-question-id="F4-d"></div>
+                <div class="question"><label for="F4-e">e) Que fait Papa (Marc) le lundi après l'école ?</label><input type="text" id="F4-e" data-question-id="F4-e"></div>
+                <div class="question">
+                    <label>f) Vrai ou Faux ? Justifie si c'est faux.</label>
+                    <div class="sub-question"><label for="F4-f1">f.1) Maman va à la piscine le mercredi matin.</label> <select id="F4-f1" data-question-id="F4-f1-choix"><option value="">Choisir</option><option value="Vrai">Vrai</option><option value="Faux">Faux</option></select> <input type="text" placeholder="Justification si Faux" data-question-id="F4-f1-justif"></div>
+                    <div class="sub-question"><label for="F4-f2">f.2) Léo fait du judo pendant 1 heure.</label> <select id="F4-f2" data-question-id="F4-f2-choix"><option value="">Choisir</option><option value="Vrai">Vrai</option><option value="Faux">Faux</option></select> <input type="text" placeholder="Justification si Faux" data-question-id="F4-f2-justif"></div>
+                    <div class="sub-question"><label for="F4-f3">f.3) La famille Dubois (Marc, Sophie, Léo, Mia) compte 3 membres actifs dans ce planning.</label> <select id="F4-f3" data-question-id="F4-f3-choix"><option value="">Choisir</option><option value="Vrai">Vrai</option><option value="Faux">Faux</option></select> <input type="text" placeholder="Justification si Faux" data-question-id="F4-f3-justif"></div>
+                </div>
+                <div class="question"><label for="F4-g">g) Quel jour Maman et les enfants vont-ils ensemble à la piscine ?</label><input type="text" id="F4-g" data-question-id="F4-g"></div>
+                <div class="question"><label for="F4-h">h) Quels sont les jours où Papa (Marc) n'a pas d'activité spécifique listée pour "après l'école" (Lu, Ma, Je) ?</label><input type="text" id="F4-h" data-question-id="F4-h"></div>
+                <div class="question"><label for="F4-i">i) Combien de temps dure la séance de piscine du mercredi pour les enfants ?</label><input type="text" id="F4-i" data-question-id="F4-i"></div>
+                <div class="question"><label for="F4-j">j) Cite 2 activités sportives réalisées par les enfants (Léo et Mia) de la famille Dubois.</label><input type="text" id="F4-j" data-question-id="F4-j"></div>
+            </div>
+        </div>
+
+        <div id="tab5" class="tab-content">
+            <div class="exercise">
+                <h2>Feuille 5: Préparatifs pour la fête de l'école</h2>
+                <div class="question-block">
+                    <h3>Exercice 1 : Kermesse et Gâteaux</h3>
+                    <p class="context">Kermesse: Samedi 15 juin, début 14h00. 28 élèves CE2. 3 sortes de gâteaux. Chaque élève apporte au moins 2 gâteaux. Vente se termine 17h30. Feu d'artifice 22h00, dure 15 minutes.</p>
+                    <div class="question">
+                        <label for="F5-1.1">1.1. Combien de temps durera la vente des gâteaux (de 14h00 à 17h30) ?</label>
+                        <input type="text" id="F5-1.1" data-question-id="F5-1.1">
+                    </div>
+                    <div class="question">
+                        <label for="F5-1.2">1.2. Quelles sont les trois données de temps (heures ou durées) importantes mentionnées dans le paragraphe concernant la kermesse et le feu d'artifice ?</label>
+                        <input type="text" id="F5-1.2" data-question-id="F5-1.2" placeholder="Ex: 10h00, 30 minutes, 14h15">
+                    </div>
+                </div>
+                 <div class="question-block">
+                    <h3>Exercice 2 : Course en sac</h3>
+                    <p class="context">CM1 organise course en sac. Besoin: 5 sacs grande taille, 8 sacs petite taille. 24 participants CM1. Parcours 50m. Délimitation: 12 plots rouges, 10 plots bleus. Début course 15h00.</p>
+                    <div class="question">
+                        <label for="F5-2.1">2.1. Combien de plots seront utilisés au total pour délimiter le parcours ?</label>
+                        <input type="text" id="F5-2.1" data-question-id="F5-2.1">
+                    </div>
+                    <div class="question">
+                        <label for="F5-2.2">2.2. Quelles sont les deux données numériques concernant les sacs nécessaires ?</label>
+                        <input type="text" id="F5-2.2" data-question-id="F5-2.2" placeholder="Ex: 3 grands, 5 petits">
+                    </div>
+                </div>
+                <div class="question-block">
+                    <h3>Exercice 3 : Pêche aux canards</h3>
+                    <p class="context">Stand pêche aux canards: besoin 60 petits jouets. Acheté: 2 lots de 15 jouets. Mme Dupont achète 25 canards en plastique. Partie: 2€. Espère vendre 100 tickets.</p>
+                    <div class="question">
+                        <label for="F5-3.1">3.1. Combien de petits jouets manque-t-il encore ?</label>
+                        <input type="text" id="F5-3.1" data-question-id="F5-3.1">
+                    </div>
+                     <div class="question">
+                        <label for="F5-3.2">3.2. Quelles sont les deux informations numériques concernant les jouets déjà acquis par l'école (avant l'achat des canards) ?</label>
+                        <input type="text" id="F5-3.2" data-question-id="F5-3.2" placeholder="Ex: 1 lot, 10 jouets">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="tab6" class="tab-content">
+            <div class="exercise">
+                <h2>Feuille 6: Une journée à la mer</h2>
+                <div class="question-block">
+                    <h3>Exercice 1 : Les coquillages</h3>
+                    <p class="context">Liam et Chloé : 125 coquillages au début. Perdu 18 en chemin. Donné 35 à leur sœur. Liam avait ramassé 60 coquillages au début.</p>
+                    <div class="question"><label for="F6-1.1">1.1. Combien de coquillages ont été perdus ou donnés au total ?</label><input type="text" id="F6-1.1" data-question-id="F6-1.1"></div>
+                    <div class="question"><label for="F6-1.2">1.2. Combien de coquillages leur reste-t-il à la fin ?</label><input type="text" id="F6-1.2" data-question-id="F6-1.2"></div>
+                    <div class="question"><label for="F6-1.3">1.3. Combien Chloé en avait-elle ramassé au début ?</label><input type="text" id="F6-1.3" data-question-id="F6-1.3"></div>
+                </div>
+                <div class="question-block">
+                    <h3>Exercice 2 : Châteaux de sable</h3>
+                    <p class="context">Concours: 6 équipes. Chaque équipe: 4 seaux, 2 pelles, 1 râteau. Durée 1h30. Après 45 min, 2 équipes abandonnent. Chaque équipe restante utilise 15 litres d'eau.</p>
+                    <div class="question"><label for="F6-2.1">2.1. Combien de seaux ont été distribués au total au début du concours ?</label><input type="text" id="F6-2.1" data-question-id="F6-2.1"></div>
+                    <div class="question"><label for="F6-2.2">2.2. Combien d'équipes ont terminé le concours ?</label><input type="text" id="F6-2.2" data-question-id="F6-2.2"></div>
+                    <div class="question"><label for="F6-2.3">2.3. Combien de litres d'eau ont été utilisés au total par les équipes finalistes ?</label><input type="text" id="F6-2.3" data-question-id="F6-2.3"></div>
+                </div>
+                <div class="question-block">
+                    <h3>Exercice 3 : Les glaces</h3>
+                    <p class="context">Papa a donné 3 billets de 5 €. Une glace coûte 2 €.</p>
+                    <div class="question"><label for="F6-3.1">3.1. Combien de glaces peut-il acheter au maximum ?</label><input type="text" id="F6-3.1" data-question-id="F6-3.1"></div>
+                    <div class="question"><label for="F6-3.2">3.2. Indique le calcul complet (ou les étapes) et le nombre de glaces.</label><input type="text" id="F6-3.2" data-question-id="F6-3.2"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab7" class="tab-content">
+            <div class="exercise">
+                <h2>Feuille 7: Les plus hauts sommets du monde</h2>
+                <p class="context">Données : Mont Everest (Asie, 8848m), K2 (Asie, 8611m), Kangchenjunga (Asie, 8586m), Aconcagua (Am. Sud, 6962m), Mont McKinley/Denali (Am. Nord, 6190m).</p>
+                <div class="question"><label for="F7-1.1">1.1. Quel titre pourrais-tu donner à un tableau présentant ces données ?</label><input type="text" id="F7-1.1" data-question-id="F7-1.1"></div>
+                <div class="question"><label for="F7-1.2">1.2. Quel est le sommet le plus haut de cette liste ?</label><input type="text" id="F7-1.2" data-question-id="F7-1.2"></div>
+                <div class="question"><label for="F7-1.3">1.3. Quelle est la différence d'altitude entre le Mont Everest et l'Aconcagua ?</label><input type="text" id="F7-1.3" data-question-id="F7-1.3"></div>
+                <div class="question"><label for="F7-1.4">1.4. Quel(s) sommet(s) de cette liste dépasse(nt) les 8000 mètres ?</label><input type="text" id="F7-1.4" data-question-id="F7-1.4"></div>
+                <div class="question"><label for="F7-1.5">1.5. Comment s'appelle le sommet qui mesure 6190 mètres ?</label><input type="text" id="F7-1.5" data-question-id="F7-1.5"></div>
+                <div class="question"><label for="F7-1.6">1.6. Quel est le sommet le moins élevé de cette liste ?</label><input type="text" id="F7-1.6" data-question-id="F7-1.6"></div>
+            </div>
+        </div>
+
+        <div id="tab8" class="tab-content">
+            <div class="exercise">
+                <h2>Feuille 8: Vente de jus de fruits</h2>
+                <p class="context">Litres de jus préparés : Lundi (A:10, B:12, C:8), Mardi (A:15, B:10, C:14), Mercredi (A:12, B:18, C:15), Jeudi (A:20, B:15, C:10), Vendredi (A:18, B:22, C:20).</p>
+                <div class="question"><label for="F8-1.1">1.1. Combien de litres la Classe A a-t-elle préparés le jeudi ?</label><input type="text" id="F8-1.1" data-question-id="F8-1.1"></div>
+                <div class="question"><label for="F8-1.2">1.2. Combien de litres la Classe C a-t-elle préparés le lundi ?</label><input type="text" id="F8-1.2" data-question-id="F8-1.2"></div>
+                <div class="question"><label for="F8-1.3">1.3. Quel jour la Classe B a-t-elle préparé le plus de litres de jus ?</label><input type="text" id="F8-1.3" data-question-id="F8-1.3"></div>
+                <div class="question"><label for="F8-1.4">1.4. Quel est le total de litres préparés par la Classe B sur toute la semaine (Lundi à Vendredi) ?</label><input type="text" id="F8-1.4" data-question-id="F8-1.4"></div>
+                <div class="question"><label for="F8-1.5">1.5. Quelle classe a préparé le plus de litres de jus le vendredi ?</label><input type="text" id="F8-1.5" data-question-id="F8-1.5"></div>
+                <div class="question"><label for="F8-1.6">1.6. Quelle classe a préparé le moins de jus le mercredi ?</label><input type="text" id="F8-1.6" data-question-id="F8-1.6"></div>
+            </div>
+        </div>
+
+        <div id="tab9" class="tab-content">
+            <div class="exercise">
+                <h2>Feuille 9: Longueur de quelques grands fleuves d'Europe</h2>
+                <p class="context">Longueurs (km) : Volga: 3530, Danube: 2850, Rhin: 1233, Loire: 1012, Tage: 1007, Seine: 777.</p>
+                <div class="question"><label for="F9-1.1">1.1. Quel est le plus long fleuve de cette liste ?</label><input type="text" id="F9-1.1" data-question-id="F9-1.1"></div>
+                <div class="question"><label for="F9-1.2">1.2. Quel(s) est (sont) le(s) fleuve(s) qui mesure(nt) moins de 1000 km ?</label><input type="text" id="F9-1.2" data-question-id="F9-1.2"></div>
+                <div class="question"><label for="F9-1.3">1.3. Comment s'appelle le fleuve qui mesure environ 1233 km ?</label><input type="text" id="F9-1.3" data-question-id="F9-1.3"></div>
+                <div class="question"><label for="F9-1.4">1.4. Classe ces fleuves du plus court au plus long (écris leurs noms séparés par des virgules).</label><input type="text" id="F9-1.4" data-question-id="F9-1.4"></div>
+                <div class="question"><label for="F9-1.5">1.5. Quels sont les fleuves dont la longueur est comprise entre 1000 km et 2000 km (inclus) ?</label><input type="text" id="F9-1.5" data-question-id="F9-1.5"></div>
+                <div class="question"><label for="F9-1.6">1.6. Quelle est la longueur de la Loire ? Et celle du Danube ?</label><input type="text" id="F9-1.6" data-question-id="F9-1.6" placeholder="Loire: ... km, Danube: ... km"></div>
+                <div class="question"><label for="F9-1.7">1.7. Quelle est la différence de longueur entre le fleuve le plus long (Volga) et le fleuve le plus court (Seine) de cette liste ?</label><input type="text" id="F9-1.7" data-question-id="F9-1.7"></div>
+                <div class="question"><label for="F9-1.8">1.8. Quel fleuve de la liste est légèrement plus long que la Loire ?</label><input type="text" id="F9-1.8" data-question-id="F9-1.8"></div>
+            </div>
+        </div>
+        
+        <div id="tab10" class="tab-content">
+            <div class="exercise">
+                 <h2>Feuille 10: Les activités de la famille Dubois (Suite)</h2>
+                 <p class="context">Utilise le même tableau que pour la Feuille 4. Marc (Papa) : Lu:Courses, Ma:Bricolage, Me:Jardinage(14h-16h), Je:Lecture. Sophie (Maman) : Lu:Yoga(17h-18h), Ma:Chercher Léo, Me:Piscine enfants(15h-17h), Je:Cuisine, Ve:Cinéma avec Marc. Léo (10a) : Lu:Devoirs, Ma:Judo(17h30-18h30), Me:Piscine/Devoirs, Je:Club lecture(16h30-17h30), Ve:Jouer ami. Mia (8a) : Lu:Devoirs, Ma:Danse(17h-18h), Me:Piscine/Dessin, Je:Aide Papa jardin, Ve:Inviter amie.</p>
+                <div class="question"><label for="F10-k">k) Qui fait les courses le lundi ?</label><input type="text" id="F10-k" data-question-id="F10-k"></div>
+                <div class="question">
+                    <label>l) Vrai ou Faux ? Justifie si c'est faux.</label>
+                    <div class="sub-question"><label for="F10-l1">l.1) Papa (Marc) fait du bricolage le mercredi.</label> <select id="F10-l1" data-question-id="F10-l1-choix"><option value="">Choisir</option><option value="Vrai">Vrai</option><option value="Faux">Faux</option></select> <input type="text" placeholder="Justification si Faux" data-question-id="F10-l1-justif"></div>
+                    <div class="sub-question"><label for="F10-l2">l.2) Mia va à la danse le mardi.</label> <select id="F10-l2" data-question-id="F10-l2-choix"><option value="">Choisir</option><option value="Vrai">Vrai</option><option value="Faux">Faux</option></select> <input type="text" placeholder="Justification si Faux" data-question-id="F10-l2-justif"></div>
+                    <div class="sub-question"><label for="F10-l3">l.3) La famille Dubois (Marc, Sophie, Léo, Mia) compte 4 membres actifs dans ce planning.</label> <select id="F10-l3" data-question-id="F10-l3-choix"><option value="">Choisir</option><option value="Vrai">Vrai</option><option value="Faux">Faux</option></select> <input type="text" placeholder="Justification si Faux" data-question-id="F10-l3-justif"></div>
+                </div>
+                <div class="question"><label for="F10-m">m) Quel jour Léo n'a-t-il pas d'activité extrascolaire spécifique listée (Lu, Ma, Me, Je, Ve) ?</label><input type="text" id="F10-m" data-question-id="F10-m"></div>
+                <div class="question"><label for="F10-n">n) Quelles sont les activités que les enfants (Léo et Mia) font le mercredi après-midi ? (Liste)</label><input type="text" id="F10-n" data-question-id="F10-n"></div>
+                <div class="question"><label for="F10-o">o) Combien de temps dure l'activité de jardinage de Papa (Marc) le mercredi ?</label><input type="text" id="F10-o" data-question-id="F10-o"></div>
+                <div class="question"><label for="F10-p">p) Combien de temps Léo passe-t-il au club de lecture le jeudi ?</label><input type="text" id="F10-p" data-question-id="F10-p"></div>
+                <div class="question"><label for="F10-q">q) Si Maman (Sophie) commence le yoga à 17h00 et termine à 18h00, combien de temps dure sa séance ?</label><input type="text" id="F10-q" data-question-id="F10-q"></div>
+                <div class="question"><label for="F10-r">r) Le vendredi soir, Maman et Papa vont au cinéma. Est-ce une activité régulière pour les enfants aussi selon ce tableau ?</label><input type="text" id="F10-r" data-question-id="F10-r"></div>
+            </div>
+        </div>
+
+        <button class="collect-button" onclick="collectAllAnswers()">Collecter toutes les réponses</button>
+
+        <div id="resultsContainer" style="display:none;">
+            <h3>Réponses collectées :</h3>
+            <textarea id="answersText" readonly></textarea>
+            <p>Copiez le texte ci-dessus pour la correction.</p>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            // Cache tous les contenus d'onglets
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            // Désactive tous les boutons d'onglets
+            tablinks = document.getElementsByClassName("tab-nav-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            // Montre l'onglet courant et active son bouton
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Active le premier onglet par défaut
+        document.addEventListener("DOMContentLoaded", function() {
+           document.querySelector('.tab-nav-button').click();
+        });
+        
+        function collectAllAnswers() {
+            let answers = "";
+            // Sélectionne tous les inputs, textareas, et selects qui ont un data-question-id
+            const inputs = document.querySelectorAll('input[data-question-id], textarea[data-question-id], select[data-question-id]');
+
+            inputs.forEach(input => {
+                const questionId = input.getAttribute('data-question-id');
+                let answer = input.value.trim();
+
+                // Cas particulier pour les Vrai/Faux où la justification est un input séparé
+                if (input.tagName === 'SELECT' && questionId.endsWith('-choix')) {
+                    const baseId = questionId.replace('-choix', '');
+                    const justificationInput = document.querySelector(`input[data-question-id="${baseId}-justif"]`);
+                    if (justificationInput && justificationInput.value.trim() !== "") {
+                        answer += ` (Justification: ${justificationInput.value.trim()})`;
+                    }
+                }
+                // Éviter de dupliquer la justification si elle a son propre ID (ce n'est pas le cas ici avec la méthode actuelle, mais bon à garder à l'esprit)
+                // On ne collecte que les inputs principaux pour éviter les doublons de justification
+                if(!questionId.endsWith('-justif')){
+                     answers += `Question ${questionId}: ${answer}\n`;
+                }
+
+            });
+
+            const resultsContainer = document.getElementById('resultsContainer');
+            const answersText = document.getElementById('answersText');
+
+            if (answersText) {
+                answersText.value = answers;
+                resultsContainer.style.display = 'block';
+                resultsContainer.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                console.error("L'élément avec l'ID 'answersText' est introuvable.");
+            }
+        }
+    </script>
+</body>
+</html>

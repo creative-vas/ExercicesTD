@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>10 Feuilles d'Exercices Interactives avec Graphiques</title>
+    <title>10 Feuilles d'Exercices Interactives avec Graphiques et Images</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -91,6 +91,7 @@
             font-size: 1.4em;
             border-bottom: 2px solid #007bff;
             padding-bottom: 8px;
+            text-align: center;
         }
         
         .exercise h3 { /* Sub-titles within an exercise sheet OR for graph titles */
@@ -99,6 +100,15 @@
             margin-bottom: 10px;
             font-size: 1.2em;
             text-align: center; /* Center graph titles */
+        }
+
+        .exercise-image {
+            display: block;
+            margin: 20px auto; /* Center the image and add some space */
+            max-width: 70%;    /* Make it responsive within the container, adjust as needed */
+            height: auto;       /* Maintain aspect ratio */
+            border-radius: 6px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
         }
 
         .question-block p.context { /* Context paragraph for an exercise */
@@ -226,6 +236,9 @@
             .exercise {
                 padding: 15px;
             }
+            .exercise-image {
+                max-width: 90%; /* Larger on smaller screens */
+            }
         }
         @media (max-width: 480px) {
             .tab-nav-button {
@@ -241,6 +254,9 @@
             }
             .exercise h3 {
                 font-size: 1.1em;
+            }
+            .exercise-image {
+                max-width: 100%; 
             }
             /* Adjust canvas size for smaller screens if needed */
             .graph-container canvas {
@@ -270,6 +286,7 @@
         <div id="tab1" class="tab-content active">
             <div class="exercise">
                 <h2>Feuille 1: Une journée au zoo</h2>
+                <img src="zoo.jfif" alt="Image illustrant une journée au zoo" class="exercise-image">
                 <div class="question-block">
                     <h3>Exercice 1 : Le spectacle des otaries</h3>
                     <p class="context">Le grand spectacle des otaries au zoo "Animalia" commence à 14h30 et dure 45 minutes. Le repas des manchots est prévu 1 heure après la fin du spectacle des otaries.</p>
@@ -320,6 +337,7 @@
         <div id="tab2" class="tab-content">
             <div class="exercise">
                 <h2>Feuille 2: Les animaux de la ferme</h2>
+                <img src="ferme.jfif" alt="Image illustrant les animaux de la ferme" class="exercise-image">
                 
                 <h3>Graphique: Nourriture distribuée aux animaux en kg par semaine</h3>
                 <div class="graph-container">
@@ -499,6 +517,7 @@
         <div id="tab3" class="tab-content">
             <div class="exercise">
                 <h2>Feuille 3: L'anniversaire de Léa</h2>
+                <img src="anniversaire.jfif" alt="Image illustrant un anniversaire" class="exercise-image">
                 <div class="question-block">
                     <h3>Exercice 1 : Entrées au parc</h3>
                     <p class="context">Pour son anniversaire, Léa a invité ses amis au parc d'attractions. L'entrée coûte 12 € par enfant. Ils sont 7 enfants au total (Léa comprise).</p>
@@ -545,6 +564,7 @@
         <div id="tab4" class="tab-content">
             <div class="exercise">
                  <h2>Feuille 4: Les activités de la famille Dubois</h2>
+                 <img src="famille_dubois.jfif" alt="Image illustrant la famille Dubois" class="exercise-image">
                  <h3>Tableau des activités de la semaine</h3>
                  <div class="graph-container">
                     <canvas id="scheduleCanvasF4" width="900" height="500"></canvas>
@@ -661,6 +681,7 @@
         <div id="tab5" class="tab-content">
             <div class="exercise">
                 <h2>Feuille 5: Préparatifs pour la fête de l'école</h2>
+                <img src="fete_ecole.jfif" alt="Image illustrant une fête d'école" class="exercise-image">
                 <div class="question-block">
                     <h3>Exercice 1 : Kermesse et Gâteaux</h3>
                     <p class="context">Kermesse: Samedi 15 juin, début 14h00. 28 élèves CE2. 3 sortes de gâteaux. Chaque élève apporte au moins 2 gâteaux. Vente se termine 17h30. Feu d'artifice 22h00, dure 15 minutes.</p>
@@ -703,6 +724,7 @@
         <div id="tab6" class="tab-content">
             <div class="exercise">
                 <h2>Feuille 6: Une journée à la mer</h2>
+                <img src="jour_mer.jfif" alt="Image illustrant une journée à la mer" class="exercise-image">
                 <div class="question-block">
                     <h3>Exercice 1 : Les coquillages</h3>
                     <p class="context">Liam et Chloé : 125 coquillages au début. Perdu 18 en chemin. Donné 35 à leur sœur. Liam avait ramassé 60 coquillages au début.</p>
@@ -729,6 +751,7 @@
         <div id="tab7" class="tab-content">
             <div class="exercise">
                 <h2>Feuille 7: Les plus hauts sommets du monde</h2>
+                <img src="sommets.jfif" alt="Image illustrant des sommets montagneux" class="exercise-image">
                 <h3>Graphique: Quelques Hauts Sommets du Monde</h3>
                 <div class="graph-container">
                     <canvas id="mountainChart" width="800" height="550"></canvas>
@@ -818,6 +841,7 @@
         <div id="tab8" class="tab-content">
             <div class="exercise">
                 <h2>Feuille 8: Vente de jus de fruits</h2>
+                <img src="jus.jfif" alt="Image illustrant des jus de fruits" class="exercise-image">
                 <h3>Tableau: Litres de jus préparés par type et par jour</h3>
                 <div class="graph-container">
                      <canvas id="juiceTableCanvas" width="800" height="400"></canvas>
@@ -908,6 +932,7 @@
         <div id="tab9" class="tab-content">
             <div class="exercise">
                 <h2>Feuille 9: Longueur de quelques grands fleuves d'Europe</h2>
+                <img src="fleuves.jfif" alt="Image illustrant des fleuves" class="exercise-image">
                 <h3>Graphique: Longueurs de Quelques Grands Fleuves (en km)</h3>
                 <div class="graph-container">
                     <canvas id="riverChart" width="800" height="550"></canvas>
@@ -994,6 +1019,7 @@
         <div id="tab10" class="tab-content">
             <div class="exercise">
                  <h2>Feuille 10: Les activités de la famille Dubois (Suite)</h2>
+                 <img src="famille_dubois_suite.jfif" alt="Image illustrant la famille Dubois pour la suite des exercices" class="exercise-image">
                  <h3>Tableau des activités de la semaine (Suite)</h3>
                  <div class="graph-container">
                     <canvas id="scheduleCanvasF10" width="900" height="500"></canvas>

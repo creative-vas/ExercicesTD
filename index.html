@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>10 Feuilles d'Exercices Interactives</title>
+    <title>10 Feuilles d'Exercices Interactives avec Graphiques</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -93,11 +93,12 @@
             padding-bottom: 8px;
         }
         
-        .exercise h3 { /* Sub-titles within an exercise sheet if needed */
+        .exercise h3 { /* Sub-titles within an exercise sheet OR for graph titles */
             color: #333;
-            margin-top: 0;
+            margin-top: 15px; /* Added margin for graph titles */
             margin-bottom: 10px;
             font-size: 1.2em;
+            text-align: center; /* Center graph titles */
         }
 
         .question-block p.context { /* Context paragraph for an exercise */
@@ -196,6 +197,17 @@
             white-space: pre-wrap;
             background-color: #fff;
         }
+        
+        .graph-container { /* Container for canvas to help with centering and spacing */
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+        .graph-container canvas {
+            border: 1px solid #ccc;
+            display: inline-block; /* To respect text-align center */
+        }
+
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
@@ -226,6 +238,14 @@
             }
             .exercise h2 {
                 font-size: 1.2em;
+            }
+            .exercise h3 {
+                font-size: 1.1em;
+            }
+            /* Adjust canvas size for smaller screens if needed */
+            .graph-container canvas {
+                max-width: 100%;
+                height: auto; /* Maintain aspect ratio */
             }
         }
     </style>
@@ -300,11 +320,72 @@
         <div id="tab2" class="tab-content">
             <div class="exercise">
                 <h2>Feuille 2: Les animaux de la ferme</h2>
+                
+                <h3>Graphique: Nourriture distribuée aux animaux en kg par semaine</h3>
+                <div class="graph-container">
+                    <canvas id="animalFoodChart" width="600" height="400"></canvas>
+                </div>
+                <script>
+                    const canvasAnimalFood = document.getElementById('animalFoodChart');
+                    const ctxAnimalFood = canvasAnimalFood.getContext('2d');
+                    const dataAnimalFood = [
+                        { animal: 'Poules', quantite: 25, type: 'Grains', couleur: 'rgba(255, 99, 132, 0.7)' },
+                        { animal: 'Cochons', quantite: 50, type: 'Restes', couleur: 'rgba(54, 162, 235, 0.7)' },
+                        { animal: 'Vaches', quantite: 80, type: 'Foin', couleur: 'rgba(75, 192, 192, 0.7)' },
+                        { animal: 'Moutons', quantite: 40, type: 'Herbe', couleur: 'rgba(153, 102, 255, 0.7)' }
+                    ];
+                    const chartWidthAnimalFood = canvasAnimalFood.width - 100;
+                    const chartHeightAnimalFood = canvasAnimalFood.height - 80;
+                    const barPaddingAnimalFood = 20;
+                    const barWidthAnimalFood = (chartWidthAnimalFood - (dataAnimalFood.length + 1) * barPaddingAnimalFood) / dataAnimalFood.length;
+                    const maxValueAnimalFood = Math.max(...dataAnimalFood.map(item => item.quantite));
+                    const scaleYAnimalFood = chartHeightAnimalFood / maxValueAnimalFood;
+
+                    ctxAnimalFood.beginPath();
+                    ctxAnimalFood.moveTo(50, 30); 
+                    ctxAnimalFood.lineTo(50, chartHeightAnimalFood + 30);
+                    ctxAnimalFood.stroke();
+                    const yAxisTicksAnimalFood = 5; 
+                    for (let i = 0; i <= yAxisTicksAnimalFood; i++) {
+                        const value = Math.round((maxValueAnimalFood / yAxisTicksAnimalFood) * i);
+                        const yPos = chartHeightAnimalFood + 30 - (value * scaleYAnimalFood);
+                        ctxAnimalFood.fillText(value + "kg", 10, yPos + 3); 
+                        ctxAnimalFood.beginPath();
+                        ctxAnimalFood.moveTo(45, yPos);
+                        ctxAnimalFood.lineTo(50, yPos);
+                        ctxAnimalFood.stroke();
+                    }
+                    ctxAnimalFood.beginPath();
+                    ctxAnimalFood.moveTo(50, chartHeightAnimalFood + 30);
+                    ctxAnimalFood.lineTo(chartWidthAnimalFood + 50, chartHeightAnimalFood + 30);
+                    ctxAnimalFood.stroke();
+                    dataAnimalFood.forEach((item, index) => {
+                        const barHeight = item.quantite * scaleYAnimalFood;
+                        const x = 50 + barPaddingAnimalFood + index * (barWidthAnimalFood + barPaddingAnimalFood);
+                        const y = chartHeightAnimalFood + 30 - barHeight;
+                        ctxAnimalFood.fillStyle = item.couleur;
+                        ctxAnimalFood.fillRect(x, y, barWidthAnimalFood, barHeight);
+                        ctxAnimalFood.fillStyle = '#000';
+                        ctxAnimalFood.textAlign = 'center';
+                        ctxAnimalFood.fillText(item.animal, x + barWidthAnimalFood / 2, chartHeightAnimalFood + 30 + 20);
+                        ctxAnimalFood.font = '12px Arial';
+                        ctxAnimalFood.fillText(`${item.quantite}kg (${item.type})`, x + barWidthAnimalFood / 2, y - 8);
+                    });
+                    ctxAnimalFood.save();
+                    ctxAnimalFood.translate(20, canvasAnimalFood.height / 2);
+                    ctxAnimalFood.rotate(-Math.PI / 2);
+                    ctxAnimalFood.textAlign = "center";
+                    ctxAnimalFood.fillStyle = '#000';
+                    ctxAnimalFood.font = '14px Arial';
+                    ctxAnimalFood.fillText("Quantité en kg", 0, 0);
+                    ctxAnimalFood.restore();
+                </script>
+
                  <div class="question-block">
                     <h3>Exercice 1 : Nourriture des animaux</h3>
-                    <p class="context">Le graphique (non montré ici, mais imaginez) "Nourriture distribuée aux animaux en kg par semaine" montre : Poules: 25kg (Grains), Cochons: 50kg (Restes), Vaches: 80kg (Foin), Moutons: 40kg (Herbe).</p>
+                    <p class="context">Le graphique ci-dessus "Nourriture distribuée aux animaux en kg par semaine" montre les quantités et types de nourriture. (Initialement: Poules: 25kg Grains, Cochons: 50kg Restes, Vaches: 80kg Foin, Moutons: 40kg Herbe).</p>
                     <div class="question">
-                        <label for="F2-1.1">1.1. Quel est le titre de ce graphique ?</label>
+                        <label for="F2-1.1">1.1. Quel est le titre de ce graphique (visible en haut de cette feuille) ?</label>
                         <input type="text" id="F2-1.1" data-question-id="F2-1.1" value="Nourriture distribuée aux animaux en kg par semaine">
                     </div>
                     <div class="question">
@@ -328,9 +409,77 @@
                         <input type="text" id="F2-1.6" data-question-id="F2-1.6">
                     </div>
                 </div>
+
+                <h3>Graphique: Nombre d'œufs récoltés cette semaine</h3>
+                <div class="graph-container">
+                     <canvas id="eggChart" width="700" height="450"></canvas>
+                </div>
+                <script>
+                    const canvasEgg = document.getElementById('eggChart');
+                    const ctxEgg = canvasEgg.getContext('2d');
+                    const dataEgg = [
+                        { jour: 'Lundi', oeufs: 18, couleur: 'rgba(255, 159, 64, 0.7)' },
+                        { jour: 'Mardi', oeufs: 22, couleur: 'rgba(75, 192, 192, 0.7)' },
+                        { jour: 'Mercredi', oeufs: 15, couleur: 'rgba(153, 102, 255, 0.7)' },
+                        { jour: 'Jeudi', oeufs: 25, couleur: 'rgba(255, 206, 86, 0.7)' },
+                        { jour: 'Vendredi', oeufs: 20, couleur: 'rgba(54, 162, 235, 0.7)' }
+                    ];
+                    const chartPaddingEgg = 60; 
+                    const chartWidthEgg = canvasEgg.width - chartPaddingEgg * 2;
+                    const chartHeightEgg = canvasEgg.height - chartPaddingEgg * 1.5; 
+                    const barPaddingEgg = 25; 
+                    const barWidthEgg = (chartWidthEgg - (dataEgg.length + 1) * barPaddingEgg) / dataEgg.length;
+                    const maxValueEgg = Math.ceil(Math.max(...dataEgg.map(item => item.oeufs)) / 5) * 5; 
+                    const scaleYEgg = chartHeightEgg / maxValueEgg;
+
+                    ctxEgg.beginPath();
+                    ctxEgg.moveTo(chartPaddingEgg, chartPaddingEgg / 2); 
+                    ctxEgg.lineTo(chartPaddingEgg, chartHeightEgg + chartPaddingEgg / 2);
+                    ctxEgg.stroke();
+                    const yAxisTicksEgg = maxValueEgg / 5; 
+                    ctxEgg.font = '12px Arial';
+                    ctxEgg.fillStyle = '#333';
+                    ctxEgg.textAlign = 'right';
+                    for (let i = 0; i <= yAxisTicksEgg; i++) {
+                        const value = i * 5;
+                        const yPos = chartHeightEgg + chartPaddingEgg / 2 - (value * scaleYEgg);
+                        ctxEgg.fillText(value, chartPaddingEgg - 10, yPos + 4); 
+                        ctxEgg.beginPath();
+                        ctxEgg.moveTo(chartPaddingEgg - 5, yPos);
+                        ctxEgg.lineTo(chartPaddingEgg, yPos);
+                        ctxEgg.stroke();
+                    }
+                    ctxEgg.beginPath();
+                    ctxEgg.moveTo(chartPaddingEgg, chartHeightEgg + chartPaddingEgg / 2);
+                    ctxEgg.lineTo(chartWidthEgg + chartPaddingEgg, chartHeightEgg + chartPaddingEgg / 2);
+                    ctxEgg.stroke();
+                    dataEgg.forEach((item, index) => {
+                        const barHeight = item.oeufs * scaleYEgg;
+                        const x = chartPaddingEgg + barPaddingEgg + index * (barWidthEgg + barPaddingEgg);
+                        const y = chartHeightEgg + chartPaddingEgg / 2 - barHeight;
+                        ctxEgg.fillStyle = item.couleur;
+                        ctxEgg.fillRect(x, y, barWidthEgg, barHeight);
+                        ctxEgg.fillStyle = '#000';
+                        ctxEgg.textAlign = 'center';
+                        ctxEgg.font = '14px Arial';
+                        ctxEgg.fillText(item.jour, x + barWidthEgg / 2, chartHeightEgg + chartPaddingEgg / 2 + 25);
+                        ctxEgg.font = '13px Arial';
+                        ctxEgg.fillStyle = '#333';
+                        ctxEgg.fillText(item.oeufs, x + barWidthEgg / 2, y - 8);
+                    });
+                    ctxEgg.save();
+                    ctxEgg.translate(chartPaddingEgg / 2 - 10, canvasEgg.height / 2);
+                    ctxEgg.rotate(-Math.PI / 2);
+                    ctxEgg.textAlign = "center";
+                    ctxEgg.fillStyle = '#000';
+                    ctxEgg.font = '16px Arial';
+                    ctxEgg.fillText("Nombre d'œufs", 0, 0);
+                    ctxEgg.restore();
+                </script>
+
                 <div class="question-block">
                     <h3>Exercice 2 : Œufs récoltés</h3>
-                    <p class="context">Données pour le graphique "Nombre d'œufs récoltés cette semaine": Lundi: 18, Mardi: 22, Mercredi: 15, Jeudi: 25, Vendredi: 20.</p>
+                    <p class="context">Le graphique ci-dessus "Nombre d'œufs récoltés cette semaine" détaille la récolte journalière. (Initialement: Lundi: 18, Mardi: 22, Mercredi: 15, Jeudi: 25, Vendredi: 20).</p>
                     <div class="question">
                         <label for="F2-2.1">2.1. Quel jour a-t-on récolté 22 œufs ?</label>
                         <input type="text" id="F2-2.1" data-question-id="F2-2.1">
@@ -396,7 +545,101 @@
         <div id="tab4" class="tab-content">
             <div class="exercise">
                  <h2>Feuille 4: Les activités de la famille Dubois</h2>
-                 <p class="context">Tableau des activités : Marc (Papa) : Lu:Courses, Ma:Bricolage, Me:Jardinage(14h-16h), Je:Lecture. Sophie (Maman) : Lu:Yoga(17h-18h), Ma:Chercher Léo, Me:Piscine enfants(15h-17h), Je:Cuisine. Léo (10a) : Lu:Devoirs, Ma:Judo(17h30-18h30), Me:Piscine/Devoirs, Je:Club lecture(16h30-17h30). Mia (8a) : Lu:Devoirs, Ma:Danse(17h-18h), Me:Piscine/Dessin, Je:Aide Papa jardin.</p>
+                 <h3>Tableau des activités de la semaine</h3>
+                 <div class="graph-container">
+                    <canvas id="scheduleCanvasF4" width="900" height="500"></canvas>
+                 </div>
+                <script>
+                    const canvasScheduleF4 = document.getElementById('scheduleCanvasF4');
+                    const ctxScheduleF4 = canvasScheduleF4.getContext('2d');
+                    const daysScheduleF4 = ["Lundi", "Mardi", "Mercredi", "Jeudi"];
+                    const peopleDataScheduleF4 = [
+                        { name: "Marc (Papa)", activities: { "Lundi": "Courses", "Mardi": "Bricolage", "Mercredi": "Jardinage (14h-16h)", "Jeudi": "Lecture" }},
+                        { name: "Sophie (Maman)", activities: { "Lundi": "Yoga (17h-18h)", "Mardi": "Chercher Léo", "Mercredi": "Piscine enfants (15h-17h)", "Jeudi": "Cuisine" }},
+                        { name: "Léo (10a)", activities: { "Lundi": "Devoirs", "Mardi": "Judo (17h30-18h30)", "Mercredi": "Piscine / Devoirs", "Jeudi": "Club lecture (16h30-17h30)" }},
+                        { name: "Mia (8a)", activities: { "Lundi": "Devoirs", "Mardi": "Danse (17h-18h)", "Mercredi": "Piscine / Dessin", "Jeudi": "Aide Papa jardin" }}
+                    ];
+                    const marginScheduleF4 = 50; 
+                    const cellTextPaddingScheduleF4 = 8; 
+                    const headerFontScheduleF4 = 'bold 14px Arial';
+                    const cellFontScheduleF4 = '12px Arial';
+                    const lineHeightScheduleF4 = 16; 
+                    const numContentRowsScheduleF4 = peopleDataScheduleF4.length;
+                    const numContentColsScheduleF4 = daysScheduleF4.length;
+                    const tableWidthScheduleF4 = canvasScheduleF4.width - 2 * marginScheduleF4;
+                    const tableHeightScheduleF4 = canvasScheduleF4.height - 2 * marginScheduleF4;
+                    const cellWidthScheduleF4 = tableWidthScheduleF4 / (numContentColsScheduleF4 + 1); 
+                    const cellHeightScheduleF4 = tableHeightScheduleF4 / (numContentRowsScheduleF4 + 1); 
+
+                    function drawTextInCellF4(text, x, y, width, height) {
+                        ctxScheduleF4.fillStyle = '#333';
+                        ctxScheduleF4.font = cellFontScheduleF4;
+                        const words = text.split(' ');
+                        let line = '';
+                        let currentY = y + cellTextPaddingScheduleF4 + (lineHeightScheduleF4 / 2); 
+                        for (let n = 0; n < words.length; n++) {
+                            const testLine = line + words[n] + ' ';
+                            const metrics = ctxScheduleF4.measureText(testLine);
+                            const testWidth = metrics.width;
+                            if (testWidth > width - 2 * cellTextPaddingScheduleF4 && n > 0) {
+                                ctxScheduleF4.fillText(line.trim(), x + cellTextPaddingScheduleF4, currentY);
+                                line = words[n] + ' ';
+                                currentY += lineHeightScheduleF4;
+                                if (currentY > y + height - cellTextPaddingScheduleF4) { 
+                                    ctxScheduleF4.fillText('...', x + width - 3 * cellTextPaddingScheduleF4, currentY - lineHeightScheduleF4); 
+                                    break;
+                                }
+                            } else {
+                                line = testLine;
+                            }
+                        }
+                        if (currentY <= y + height - cellTextPaddingScheduleF4 + (lineHeightScheduleF4/2) ) { 
+                           ctxScheduleF4.fillText(line.trim(), x + cellTextPaddingScheduleF4, currentY);
+                        }
+                    }
+                    ctxScheduleF4.strokeStyle = '#ccc';
+                    ctxScheduleF4.lineWidth = 1;
+                    for (let i = 0; i <= numContentRowsScheduleF4 + 1; i++) {
+                        ctxScheduleF4.beginPath();
+                        ctxScheduleF4.moveTo(marginScheduleF4, marginScheduleF4 + i * cellHeightScheduleF4);
+                        ctxScheduleF4.lineTo(marginScheduleF4 + tableWidthScheduleF4, marginScheduleF4 + i * cellHeightScheduleF4);
+                        ctxScheduleF4.stroke();
+                    }
+                    for (let i = 0; i <= numContentColsScheduleF4 + 1; i++) {
+                        ctxScheduleF4.beginPath();
+                        ctxScheduleF4.moveTo(marginScheduleF4 + i * cellWidthScheduleF4, marginScheduleF4);
+                        ctxScheduleF4.lineTo(marginScheduleF4 + i * cellWidthScheduleF4, marginScheduleF4 + tableHeightScheduleF4);
+                        ctxScheduleF4.stroke();
+                    }
+                    ctxScheduleF4.textAlign = 'left'; 
+                    ctxScheduleF4.textBaseline = 'middle';
+                    daysScheduleF4.forEach((day, index) => {
+                        const x = marginScheduleF4 + (index + 1) * cellWidthScheduleF4 + cellWidthScheduleF4 / 2;
+                        const y = marginScheduleF4 + cellHeightScheduleF4 / 2;
+                        ctxScheduleF4.font = headerFontScheduleF4;
+                        ctxScheduleF4.fillStyle = '#000';
+                        ctxScheduleF4.textAlign = 'center'; 
+                        ctxScheduleF4.fillText(day, x, y);
+                        ctxScheduleF4.textAlign = 'left'; 
+                    });
+                    peopleDataScheduleF4.forEach((person, index) => {
+                        const x = marginScheduleF4 + cellTextPaddingScheduleF4;
+                        const y = marginScheduleF4 + (index + 1) * cellHeightScheduleF4 + cellHeightScheduleF4 / 2;
+                        ctxScheduleF4.font = headerFontScheduleF4;
+                        ctxScheduleF4.fillStyle = '#000';
+                        ctxScheduleF4.textBaseline = 'middle';
+                        ctxScheduleF4.fillText(person.name, x, y);
+                    });
+                    peopleDataScheduleF4.forEach((person, rowIndex) => {
+                        daysScheduleF4.forEach((day, colIndex) => {
+                            const activity = person.activities[day] || ""; 
+                            const cellX = marginScheduleF4 + (colIndex + 1) * cellWidthScheduleF4;
+                            const cellY = marginScheduleF4 + (rowIndex + 1) * cellHeightScheduleF4;
+                            drawTextInCellF4(activity, cellX, cellY, cellWidthScheduleF4, cellHeightScheduleF4);
+                        });
+                    });
+                </script>
+                 <p class="context">Consultez le tableau des activités ci-dessus. (Initialement: Marc (Papa) : Lu:Courses, Ma:Bricolage, Me:Jardinage(14h-16h), Je:Lecture. Sophie (Maman) : Lu:Yoga(17h-18h), Ma:Chercher Léo, Me:Piscine enfants(15h-17h), Je:Cuisine. Léo (10a) : Lu:Devoirs, Ma:Judo(17h30-18h30), Me:Piscine/Devoirs, Je:Club lecture(16h30-17h30). Mia (8a) : Lu:Devoirs, Ma:Danse(17h-18h), Me:Piscine/Dessin, Je:Aide Papa jardin).</p>
                 <div class="question"><label for="F4-a">a) Quel jour Léo va-t-il au judo ?</label><input type="text" id="F4-a" data-question-id="F4-a"></div>
                 <div class="question"><label for="F4-b">b) Combien d'activités différentes Maman fait-elle le mercredi après-midi (selon le tableau) ?</label><input type="text" id="F4-b" data-question-id="F4-b"></div>
                 <div class="question"><label for="F4-c">c) Qui fait du yoga et quand (jour et heure) ?</label><input type="text" id="F4-c" data-question-id="F4-c"></div>
@@ -486,8 +729,84 @@
         <div id="tab7" class="tab-content">
             <div class="exercise">
                 <h2>Feuille 7: Les plus hauts sommets du monde</h2>
-                <p class="context">Données : Mont Everest (Asie, 8848m), K2 (Asie, 8611m), Kangchenjunga (Asie, 8586m), Aconcagua (Am. Sud, 6962m), Mont McKinley/Denali (Am. Nord, 6190m).</p>
-                <div class="question"><label for="F7-1.1">1.1. Quel titre pourrais-tu donner à un tableau présentant ces données ?</label><input type="text" id="F7-1.1" data-question-id="F7-1.1"></div>
+                <h3>Graphique: Quelques Hauts Sommets du Monde</h3>
+                <div class="graph-container">
+                    <canvas id="mountainChart" width="800" height="550"></canvas>
+                </div>
+                <script>
+                    const canvasMountain = document.getElementById('mountainChart');
+                    const ctxMountain = canvasMountain.getContext('2d');
+                    const dataMountain = [
+                        { nom: 'Mont Everest', continent: 'Asie', hauteur: 8848, couleur: 'rgba(46, 204, 113, 0.8)' }, 
+                        { nom: 'K2', continent: 'Asie', hauteur: 8611, couleur: 'rgba(52, 152, 219, 0.8)' },         
+                        { nom: 'Kangchenjunga', continent: 'Asie', hauteur: 8586, couleur: 'rgba(155, 89, 182, 0.8)' },
+                        { nom: 'Aconcagua', continent: 'Am. Sud', hauteur: 6962, couleur: 'rgba(230, 126, 34, 0.8)' }, 
+                        { nom: 'McKinley/Denali', continent: 'Am. Nord', hauteur: 6190, couleur: 'rgba(241, 196, 15, 0.8)' } 
+                    ];
+                    const chartPaddingMountain = 70; 
+                    const chartWidthMountain = canvasMountain.width - chartPaddingMountain * 2;
+                    const chartHeightMountain = canvasMountain.height - chartPaddingMountain * 1.8; 
+                    const barPaddingMountain = 30;
+                    const barWidthMountain = (chartWidthMountain - (dataMountain.length + 1) * barPaddingMountain) / dataMountain.length;
+                    const maxHeightMountain = Math.max(...dataMountain.map(item => item.hauteur));
+                    const maxValueYMountain = Math.ceil(maxHeightMountain / 1000) * 1000;
+                    const scaleYMountain = chartHeightMountain / maxValueYMountain;
+
+                    ctxMountain.beginPath();
+                    ctxMountain.moveTo(chartPaddingMountain, chartPaddingMountain / 2);
+                    ctxMountain.lineTo(chartPaddingMountain, chartHeightMountain + chartPaddingMountain / 2);
+                    ctxMountain.strokeStyle = '#333';
+                    ctxMountain.stroke();
+                    const yAxisTickIntervalMountain = 1000; 
+                    const numTicksYMountain = maxValueYMountain / yAxisTickIntervalMountain;
+                    ctxMountain.font = '12px Arial';
+                    ctxMountain.fillStyle = '#333';
+                    ctxMountain.textAlign = 'right';
+                    for (let i = 0; i <= numTicksYMountain; i++) {
+                        const value = i * yAxisTickIntervalMountain;
+                        const yPos = chartHeightMountain + chartPaddingMountain / 2 - (value * scaleYMountain);
+                        ctxMountain.fillText(value + "m", chartPaddingMountain - 10, yPos + 4);
+                        ctxMountain.beginPath();
+                        ctxMountain.moveTo(chartPaddingMountain - 5, yPos);
+                        ctxMountain.lineTo(chartPaddingMountain, yPos);
+                        ctxMountain.stroke();
+                    }
+                    ctxMountain.beginPath();
+                    ctxMountain.moveTo(chartPaddingMountain, chartHeightMountain + chartPaddingMountain / 2);
+                    ctxMountain.lineTo(chartWidthMountain + chartPaddingMountain, chartHeightMountain + chartPaddingMountain / 2);
+                    ctxMountain.stroke();
+                    dataMountain.forEach((item, index) => {
+                        const barHeightValue = item.hauteur * scaleYMountain;
+                        const x = chartPaddingMountain + barPaddingMountain + index * (barWidthMountain + barPaddingMountain);
+                        const y = chartHeightMountain + chartPaddingMountain / 2 - barHeightValue;
+                        ctxMountain.fillStyle = item.couleur;
+                        ctxMountain.fillRect(x, y, barWidthMountain, barHeightValue);
+                        ctxMountain.fillStyle = '#000';
+                        ctxMountain.textAlign = 'center';
+                        ctxMountain.font = '11px Arial'; 
+                        const nameParts = item.nom.split('/');
+                        let textYOffset = chartHeightMountain + chartPaddingMountain / 2 + 20;
+                        nameParts.forEach(part => {
+                            ctxMountain.fillText(part, x + barWidthMountain / 2, textYOffset);
+                            textYOffset += 13; 
+                        });
+                        ctxMountain.font = '10px Arial';
+                        ctxMountain.fillText(`(${item.continent})`, x + barWidthMountain / 2, textYOffset);
+                        ctxMountain.font = '12px Arial';
+                        ctxMountain.fillStyle = '#2c3e50';
+                        ctxMountain.fillText(item.hauteur + "m", x + barWidthMountain / 2, y - 8);
+                    });
+                    ctxMountain.save();
+                    ctxMountain.translate(chartPaddingMountain / 2 - 20, canvasMountain.height / 2); 
+                    ctxMountain.rotate(-Math.PI / 2);
+                    ctxMountain.textAlign = "center";
+                    ctxMountain.fillStyle = '#2c3e50';
+                    ctxMountain.font = '14px Arial';
+                    ctxMountain.fillText("Hauteur (m)", 0, 0);
+                    ctxMountain.restore();
+                </script>
+                <p class="context">Observez le graphique ci-dessus. Données initiales : Mont Everest (Asie, 8848m), K2 (Asie, 8611m), Kangchenjunga (Asie, 8586m), Aconcagua (Am. Sud, 6962m), Mont McKinley/Denali (Am. Nord, 6190m).</p>
+                <div class="question"><label for="F7-1.1">1.1. Quel titre pourrais-tu donner à un tableau présentant ces données (le titre du graphique est déjà donné) ?</label><input type="text" id="F7-1.1" data-question-id="F7-1.1"></div>
                 <div class="question"><label for="F7-1.2">1.2. Quel est le sommet le plus haut de cette liste ?</label><input type="text" id="F7-1.2" data-question-id="F7-1.2"></div>
                 <div class="question"><label for="F7-1.3">1.3. Quelle est la différence d'altitude entre le Mont Everest et l'Aconcagua ?</label><input type="text" id="F7-1.3" data-question-id="F7-1.3"></div>
                 <div class="question"><label for="F7-1.4">1.4. Quel(s) sommet(s) de cette liste dépasse(nt) les 8000 mètres ?</label><input type="text" id="F7-1.4" data-question-id="F7-1.4"></div>
@@ -499,20 +818,168 @@
         <div id="tab8" class="tab-content">
             <div class="exercise">
                 <h2>Feuille 8: Vente de jus de fruits</h2>
-                <p class="context">Litres de jus préparés : Lundi (A:10, B:12, C:8), Mardi (A:15, B:10, C:14), Mercredi (A:12, B:18, C:15), Jeudi (A:20, B:15, C:10), Vendredi (A:18, B:22, C:20).</p>
-                <div class="question"><label for="F8-1.1">1.1. Combien de litres la Classe A a-t-elle préparés le jeudi ?</label><input type="text" id="F8-1.1" data-question-id="F8-1.1"></div>
-                <div class="question"><label for="F8-1.2">1.2. Combien de litres la Classe C a-t-elle préparés le lundi ?</label><input type="text" id="F8-1.2" data-question-id="F8-1.2"></div>
-                <div class="question"><label for="F8-1.3">1.3. Quel jour la Classe B a-t-elle préparé le plus de litres de jus ?</label><input type="text" id="F8-1.3" data-question-id="F8-1.3"></div>
-                <div class="question"><label for="F8-1.4">1.4. Quel est le total de litres préparés par la Classe B sur toute la semaine (Lundi à Vendredi) ?</label><input type="text" id="F8-1.4" data-question-id="F8-1.4"></div>
-                <div class="question"><label for="F8-1.5">1.5. Quelle classe a préparé le plus de litres de jus le vendredi ?</label><input type="text" id="F8-1.5" data-question-id="F8-1.5"></div>
-                <div class="question"><label for="F8-1.6">1.6. Quelle classe a préparé le moins de jus le mercredi ?</label><input type="text" id="F8-1.6" data-question-id="F8-1.6"></div>
+                <h3>Tableau: Litres de jus préparés par type et par jour</h3>
+                <div class="graph-container">
+                     <canvas id="juiceTableCanvas" width="800" height="400"></canvas>
+                </div>
+                <script>
+                    const canvasJuice = document.getElementById('juiceTableCanvas');
+                    const ctxJuice = canvasJuice.getContext('2d');
+                    const daysJuice = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
+                    const juiceDataJuice = [
+                        { type: "Jus A", litres: { "Lundi": 10, "Mardi": 15, "Mercredi": 12, "Jeudi": 20, "Vendredi": 18 }},
+                        { type: "Jus B", litres: { "Lundi": 12, "Mardi": 10, "Mercredi": 18, "Jeudi": 15, "Vendredi": 22 }},
+                        { type: "Jus C", litres: { "Lundi": 8, "Mardi": 14, "Mercredi": 15, "Jeudi": 10, "Vendredi": 20 }}
+                    ];
+                    const marginJuice = 50;
+                    const cellTextPaddingJuice = 10; 
+                    const headerFontJuice = 'bold 14px Arial';
+                    const cellFontJuice = '14px Arial'; 
+                    const unitSuffixJuice = ' L'; 
+                    const numContentRowsJuice = juiceDataJuice.length;
+                    const numContentColsJuice = daysJuice.length;
+                    const tableWidthJuice = canvasJuice.width - 2 * marginJuice;
+                    const tableHeightJuice = canvasJuice.height - 2 * marginJuice;
+                    const cellWidthJuice = tableWidthJuice / (numContentColsJuice + 1); 
+                    const cellHeightJuice = tableHeightJuice / (numContentRowsJuice + 1); 
+
+                    function drawNumericCellJuice(text, suffix, x, y, cellWidth, cellHeight) {
+                        ctxJuice.fillStyle = '#212529'; 
+                        ctxJuice.font = cellFontJuice;
+                        ctxJuice.textAlign = 'center';
+                        ctxJuice.textBaseline = 'middle';
+                        ctxJuice.fillText(text + suffix, x + cellWidth / 2, y + cellHeight / 2);
+                    }
+                    ctxJuice.strokeStyle = '#adb5bd'; 
+                    ctxJuice.lineWidth = 1;
+                    for (let i = 0; i <= numContentRowsJuice + 1; i++) {
+                        ctxJuice.beginPath();
+                        ctxJuice.moveTo(marginJuice, marginJuice + i * cellHeightJuice);
+                        ctxJuice.lineTo(marginJuice + tableWidthJuice, marginJuice + i * cellHeightJuice);
+                        ctxJuice.stroke();
+                    }
+                    for (let i = 0; i <= numContentColsJuice + 1; i++) {
+                        ctxJuice.beginPath();
+                        ctxJuice.moveTo(marginJuice + i * cellWidthJuice, marginJuice);
+                        ctxJuice.lineTo(marginJuice + i * cellWidthJuice, marginJuice + tableHeightJuice);
+                        ctxJuice.stroke();
+                    }
+                    ctxJuice.fillStyle = '#495057'; 
+                    daysJuice.forEach((day, index) => {
+                        const x = marginJuice + (index + 1) * cellWidthJuice + cellWidthJuice / 2;
+                        const y = marginJuice + cellHeightJuice / 2;
+                        ctxJuice.font = headerFontJuice;
+                        ctxJuice.textAlign = 'center';
+                        ctxJuice.textBaseline = 'middle';
+                        ctxJuice.fillText(day, x, y);
+                    });
+                    juiceDataJuice.forEach((juice, index) => {
+                        const x = marginJuice + cellTextPaddingJuice;
+                        const y = marginJuice + (index + 1) * cellHeightJuice + cellHeightJuice / 2;
+                        ctxJuice.font = headerFontJuice;
+                        ctxJuice.textAlign = 'left';
+                        ctxJuice.textBaseline = 'middle';
+                        ctxJuice.fillText(juice.type, x, y);
+                    });
+                    juiceDataJuice.forEach((juice, rowIndex) => {
+                        daysJuice.forEach((day, colIndex) => {
+                            const quantity = juice.litres[day] !== undefined ? juice.litres[day] : "-";
+                            const cellX = marginJuice + (colIndex + 1) * cellWidthJuice;
+                            const cellY = marginJuice + (rowIndex + 1) * cellHeightJuice;
+                            drawNumericCellJuice(quantity.toString(), unitSuffixJuice, cellX, cellY, cellWidthJuice, cellHeightJuice);
+                        });
+                    });
+                    ctxJuice.font = 'italic 12px Arial';
+                    ctxJuice.fillStyle = '#6c757d';
+                    ctxJuice.textAlign = 'center';
+                    ctxJuice.textBaseline = 'middle';
+                    ctxJuice.fillText("Jus/Jour", marginJuice + cellWidthJuice / 2, marginJuice + cellHeightJuice / 2);
+                </script>
+                <p class="context">Observez le tableau ci-dessus. Litres de jus préparés : Lundi (A:10, B:12, C:8), Mardi (A:15, B:10, C:14), Mercredi (A:12, B:18, C:15), Jeudi (A:20, B:15, C:10), Vendredi (A:18, B:22, C:20).</p>
+                <div class="question"><label for="F8-1.1">1.1. Combien de litres la Classe A (Jus A) a-t-elle préparés le jeudi ?</label><input type="text" id="F8-1.1" data-question-id="F8-1.1"></div>
+                <div class="question"><label for="F8-1.2">1.2. Combien de litres la Classe C (Jus C) a-t-elle préparés le lundi ?</label><input type="text" id="F8-1.2" data-question-id="F8-1.2"></div>
+                <div class="question"><label for="F8-1.3">1.3. Quel jour la Classe B (Jus B) a-t-elle préparé le plus de litres de jus ?</label><input type="text" id="F8-1.3" data-question-id="F8-1.3"></div>
+                <div class="question"><label for="F8-1.4">1.4. Quel est le total de litres préparés par la Classe B (Jus B) sur toute la semaine (Lundi à Vendredi) ?</label><input type="text" id="F8-1.4" data-question-id="F8-1.4"></div>
+                <div class="question"><label for="F8-1.5">1.5. Quelle classe (Jus A, B, ou C) a préparé le plus de litres de jus le vendredi ?</label><input type="text" id="F8-1.5" data-question-id="F8-1.5"></div>
+                <div class="question"><label for="F8-1.6">1.6. Quelle classe (Jus A, B, ou C) a préparé le moins de jus le mercredi ?</label><input type="text" id="F8-1.6" data-question-id="F8-1.6"></div>
             </div>
         </div>
 
         <div id="tab9" class="tab-content">
             <div class="exercise">
                 <h2>Feuille 9: Longueur de quelques grands fleuves d'Europe</h2>
-                <p class="context">Longueurs (km) : Volga: 3530, Danube: 2850, Rhin: 1233, Loire: 1012, Tage: 1007, Seine: 777.</p>
+                <h3>Graphique: Longueurs de Quelques Grands Fleuves (en km)</h3>
+                <div class="graph-container">
+                    <canvas id="riverChart" width="800" height="550"></canvas>
+                </div>
+                <script>
+                    const canvasRiver = document.getElementById('riverChart');
+                    const ctxRiver = canvasRiver.getContext('2d');
+                    const dataRiver = [
+                        { nom: 'Volga', longueur: 3530, couleur: 'rgba(39, 174, 96, 0.8)' },   
+                        { nom: 'Danube', longueur: 2850, couleur: 'rgba(41, 128, 185, 0.8)' },  
+                        { nom: 'Rhin', longueur: 1233, couleur: 'rgba(142, 68, 173, 0.8)' },  
+                        { nom: 'Loire', longueur: 1012, couleur: 'rgba(243, 156, 18, 0.8)' },  
+                        { nom: 'Tage', longueur: 1007, couleur: 'rgba(211, 84, 0, 0.8)' },     
+                        { nom: 'Seine', longueur: 777, couleur: 'rgba(192, 57, 43, 0.8)' }    
+                    ];
+                    const chartPaddingRiver = 70;
+                    const chartWidthRiver = canvasRiver.width - chartPaddingRiver * 2;
+                    const chartHeightRiver = canvasRiver.height - chartPaddingRiver * 1.8;
+                    const barPaddingRiver = 35; 
+                    const barWidthRiver = (chartWidthRiver - (dataRiver.length + 1) * barPaddingRiver) / dataRiver.length;
+                    const maxLengthRiver = Math.max(...dataRiver.map(item => item.longueur));
+                    const maxValueYRiver = Math.ceil(maxLengthRiver / 500) * 500; 
+                    const scaleYRiver = chartHeightRiver / maxValueYRiver;
+
+                    ctxRiver.beginPath();
+                    ctxRiver.moveTo(chartPaddingRiver, chartPaddingRiver / 2);
+                    ctxRiver.lineTo(chartPaddingRiver, chartHeightRiver + chartPaddingRiver / 2);
+                    ctxRiver.strokeStyle = '#555'; 
+                    ctxRiver.stroke();
+                    const yAxisTickIntervalRiver = 500; 
+                    const numTicksYRiver = maxValueYRiver / yAxisTickIntervalRiver;
+                    ctxRiver.font = '12px Arial';
+                    ctxRiver.fillStyle = '#333';
+                    ctxRiver.textAlign = 'right';
+                    for (let i = 0; i <= numTicksYRiver; i++) {
+                        const value = i * yAxisTickIntervalRiver;
+                        const yPos = chartHeightRiver + chartPaddingRiver / 2 - (value * scaleYRiver);
+                        ctxRiver.fillText(value + " km", chartPaddingRiver - 10, yPos + 4); 
+                        ctxRiver.beginPath();
+                        ctxRiver.moveTo(chartPaddingRiver - 5, yPos);
+                        ctxRiver.lineTo(chartPaddingRiver, yPos);
+                        ctxRiver.stroke();
+                    }
+                    ctxRiver.beginPath();
+                    ctxRiver.moveTo(chartPaddingRiver, chartHeightRiver + chartPaddingRiver / 2);
+                    ctxRiver.lineTo(chartWidthRiver + chartPaddingRiver, chartHeightRiver + chartPaddingRiver / 2);
+                    ctxRiver.strokeStyle = '#555';
+                    ctxRiver.stroke();
+                    dataRiver.forEach((item, index) => {
+                        const barHeightValue = item.longueur * scaleYRiver;
+                        const x = chartPaddingRiver + barPaddingRiver + index * (barWidthRiver + barPaddingRiver);
+                        const y = chartHeightRiver + chartPaddingRiver / 2 - barHeightValue;
+                        ctxRiver.fillStyle = item.couleur;
+                        ctxRiver.fillRect(x, y, barWidthRiver, barHeightValue);
+                        ctxRiver.fillStyle = '#000';
+                        ctxRiver.textAlign = 'center';
+                        ctxRiver.font = '13px Arial'; 
+                        ctxRiver.fillText(item.nom, x + barWidthRiver / 2, chartHeightRiver + chartPaddingRiver / 2 + 25);
+                        ctxRiver.font = '12px Arial';
+                        ctxRiver.fillStyle = '#2c3e50';
+                        ctxRiver.fillText(item.longueur + " km", x + barWidthRiver / 2, y - 8);
+                    });
+                    ctxRiver.save();
+                    ctxRiver.translate(chartPaddingRiver / 2 - 25, canvasRiver.height / 2); 
+                    ctxRiver.rotate(-Math.PI / 2);
+                    ctxRiver.textAlign = "center";
+                    ctxRiver.fillStyle = '#333a40';
+                    ctxRiver.font = '14px Arial';
+                    ctxRiver.fillText("Longueur (km)", 0, 0);
+                    ctxRiver.restore();
+                </script>
+                <p class="context">Le graphique ci-dessus montre les longueurs (km) de plusieurs fleuves : Volga: 3530, Danube: 2850, Rhin: 1233, Loire: 1012, Tage: 1007, Seine: 777.</p>
                 <div class="question"><label for="F9-1.1">1.1. Quel est le plus long fleuve de cette liste ?</label><input type="text" id="F9-1.1" data-question-id="F9-1.1"></div>
                 <div class="question"><label for="F9-1.2">1.2. Quel(s) est (sont) le(s) fleuve(s) qui mesure(nt) moins de 1000 km ?</label><input type="text" id="F9-1.2" data-question-id="F9-1.2"></div>
                 <div class="question"><label for="F9-1.3">1.3. Comment s'appelle le fleuve qui mesure environ 1233 km ?</label><input type="text" id="F9-1.3" data-question-id="F9-1.3"></div>
@@ -527,7 +994,102 @@
         <div id="tab10" class="tab-content">
             <div class="exercise">
                  <h2>Feuille 10: Les activités de la famille Dubois (Suite)</h2>
-                 <p class="context">Utilise le même tableau que pour la Feuille 4. Marc (Papa) : Lu:Courses, Ma:Bricolage, Me:Jardinage(14h-16h), Je:Lecture. Sophie (Maman) : Lu:Yoga(17h-18h), Ma:Chercher Léo, Me:Piscine enfants(15h-17h), Je:Cuisine, Ve:Cinéma avec Marc. Léo (10a) : Lu:Devoirs, Ma:Judo(17h30-18h30), Me:Piscine/Devoirs, Je:Club lecture(16h30-17h30), Ve:Jouer ami. Mia (8a) : Lu:Devoirs, Ma:Danse(17h-18h), Me:Piscine/Dessin, Je:Aide Papa jardin, Ve:Inviter amie.</p>
+                 <h3>Tableau des activités de la semaine (Suite)</h3>
+                 <div class="graph-container">
+                    <canvas id="scheduleCanvasF10" width="900" height="500"></canvas>
+                 </div>
+                 <script>
+                    const canvasScheduleF10 = document.getElementById('scheduleCanvasF10');
+                    const ctxScheduleF10 = canvasScheduleF10.getContext('2d');
+                    // Note: Data includes Friday activities for this version of the chart
+                    const daysScheduleF10 = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"]; 
+                    const peopleDataScheduleF10 = [
+                        { name: "Marc (Papa)", activities: { "Lundi": "Courses", "Mardi": "Bricolage", "Mercredi": "Jardinage (14h-16h)", "Jeudi": "Lecture", "Vendredi": "Cinéma avec Sophie" }},
+                        { name: "Sophie (Maman)", activities: { "Lundi": "Yoga (17h-18h)", "Mardi": "Chercher Léo", "Mercredi": "Piscine enfants (15h-17h)", "Jeudi": "Cuisine", "Vendredi": "Cinéma avec Marc" }},
+                        { name: "Léo (10a)", activities: { "Lundi": "Devoirs", "Mardi": "Judo (17h30-18h30)", "Mercredi": "Piscine / Devoirs", "Jeudi": "Club lecture (16h30-17h30)", "Vendredi": "Jouer ami" }},
+                        { name: "Mia (8a)", activities: { "Lundi": "Devoirs", "Mardi": "Danse (17h-18h)", "Mercredi": "Piscine / Dessin", "Jeudi": "Aide Papa jardin", "Vendredi": "Inviter amie" }}
+                    ];
+                    const marginScheduleF10 = 50; 
+                    const cellTextPaddingScheduleF10 = 8; 
+                    const headerFontScheduleF10 = 'bold 14px Arial';
+                    const cellFontScheduleF10 = '12px Arial';
+                    const lineHeightScheduleF10 = 16; 
+                    const numContentRowsScheduleF10 = peopleDataScheduleF10.length;
+                    const numContentColsScheduleF10 = daysScheduleF10.length; // Adjusted for 5 days
+                    const tableWidthScheduleF10 = canvasScheduleF10.width - 2 * marginScheduleF10;
+                    const tableHeightScheduleF10 = canvasScheduleF10.height - 2 * marginScheduleF10;
+                    const cellWidthScheduleF10 = tableWidthScheduleF10 / (numContentColsScheduleF10 + 1); 
+                    const cellHeightScheduleF10 = tableHeightScheduleF10 / (numContentRowsScheduleF10 + 1); 
+
+                    function drawTextInCellF10(text, x, y, width, height) {
+                        ctxScheduleF10.fillStyle = '#333';
+                        ctxScheduleF10.font = cellFontScheduleF10;
+                        const words = text.split(' ');
+                        let line = '';
+                        let currentY = y + cellTextPaddingScheduleF10 + (lineHeightScheduleF10 / 2); 
+                        for (let n = 0; n < words.length; n++) {
+                            const testLine = line + words[n] + ' ';
+                            const metrics = ctxScheduleF10.measureText(testLine);
+                            const testWidth = metrics.width;
+                            if (testWidth > width - 2 * cellTextPaddingScheduleF10 && n > 0) {
+                                ctxScheduleF10.fillText(line.trim(), x + cellTextPaddingScheduleF10, currentY);
+                                line = words[n] + ' ';
+                                currentY += lineHeightScheduleF10;
+                                if (currentY > y + height - cellTextPaddingScheduleF10) { 
+                                    ctxScheduleF10.fillText('...', x + width - 3 * cellTextPaddingScheduleF10, currentY - lineHeightScheduleF10); 
+                                    break;
+                                }
+                            } else {
+                                line = testLine;
+                            }
+                        }
+                        if (currentY <= y + height - cellTextPaddingScheduleF10 + (lineHeightScheduleF10/2) ) { 
+                           ctxScheduleF10.fillText(line.trim(), x + cellTextPaddingScheduleF10, currentY);
+                        }
+                    }
+                    ctxScheduleF10.strokeStyle = '#ccc';
+                    ctxScheduleF10.lineWidth = 1;
+                    for (let i = 0; i <= numContentRowsScheduleF10 + 1; i++) {
+                        ctxScheduleF10.beginPath();
+                        ctxScheduleF10.moveTo(marginScheduleF10, marginScheduleF10 + i * cellHeightScheduleF10);
+                        ctxScheduleF10.lineTo(marginScheduleF10 + tableWidthScheduleF10, marginScheduleF10 + i * cellHeightScheduleF10);
+                        ctxScheduleF10.stroke();
+                    }
+                    for (let i = 0; i <= numContentColsScheduleF10 + 1; i++) {
+                        ctxScheduleF10.beginPath();
+                        ctxScheduleF10.moveTo(marginScheduleF10 + i * cellWidthScheduleF10, marginScheduleF10);
+                        ctxScheduleF10.lineTo(marginScheduleF10 + i * cellWidthScheduleF10, marginScheduleF10 + tableHeightScheduleF10);
+                        ctxScheduleF10.stroke();
+                    }
+                    ctxScheduleF10.textAlign = 'left'; 
+                    ctxScheduleF10.textBaseline = 'middle';
+                    daysScheduleF10.forEach((day, index) => {
+                        const x = marginScheduleF10 + (index + 1) * cellWidthScheduleF10 + cellWidthScheduleF10 / 2;
+                        const y = marginScheduleF10 + cellHeightScheduleF10 / 2;
+                        ctxScheduleF10.font = headerFontScheduleF10;
+                        ctxScheduleF10.fillStyle = '#000';
+                        ctxScheduleF10.textAlign = 'center'; 
+                        ctxScheduleF10.fillText(day, x, y);
+                        ctxScheduleF10.textAlign = 'left'; 
+                    });
+                    peopleDataScheduleF10.forEach((person, index) => {
+                        const x = marginScheduleF10 + cellTextPaddingScheduleF10;
+                        const y = marginScheduleF10 + (index + 1) * cellHeightScheduleF10 + cellHeightScheduleF10 / 2;
+                        ctxScheduleF10.font = headerFontScheduleF10;
+                        ctxScheduleF10.fillStyle = '#000';
+                        ctxScheduleF10.textBaseline = 'middle';
+                        ctxScheduleF10.fillText(person.name, x, y);
+                    });
+                    peopleDataScheduleF10.forEach((person, rowIndex) => {
+                        daysScheduleF10.forEach((day, colIndex) => {
+                            const activity = person.activities[day] || ""; 
+                            const cellX = marginScheduleF10 + (colIndex + 1) * cellWidthScheduleF10;
+                            const cellY = marginScheduleF10 + (rowIndex + 1) * cellHeightScheduleF10;
+                            drawTextInCellF10(activity, cellX, cellY, cellWidthScheduleF10, cellHeightScheduleF10);
+                        });
+                    });
+                 </script>
+                 <p class="context">Utilisez le tableau des activités ci-dessus (qui inclut maintenant le vendredi). Données initiales : Marc (Papa) : Lu:Courses, Ma:Bricolage, Me:Jardinage(14h-16h), Je:Lecture, Ve:Cinéma avec Marc. Sophie (Maman) : Lu:Yoga(17h-18h), Ma:Chercher Léo, Me:Piscine enfants(15h-17h), Je:Cuisine, Ve:Cinéma avec Sophie. Léo (10a) : Lu:Devoirs, Ma:Judo(17h30-18h30), Me:Piscine/Devoirs, Je:Club lecture(16h30-17h30), Ve:Jouer ami. Mia (8a) : Lu:Devoirs, Ma:Danse(17h-18h), Me:Piscine/Dessin, Je:Aide Papa jardin, Ve:Inviter amie.</p>
                 <div class="question"><label for="F10-k">k) Qui fait les courses le lundi ?</label><input type="text" id="F10-k" data-question-id="F10-k"></div>
                 <div class="question">
                     <label>l) Vrai ou Faux ? Justifie si c'est faux.</label>
